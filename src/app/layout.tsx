@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import Header from "../components/Header";
+import { cn } from "@/lib/utils";
+import { Provider } from "jotai";
 
-const inter = Inter({ subsets: ["latin"] });
+const ggSans = localFont({
+  src: "../../public/gg-sans.ttf",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +21,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <Provider>
+        <body
+          className={cn(
+            ggSans.className,
+            "flex flex-col min-h-screen items-center justify-start bg-primary-bg"
+          )}
+        >
+          <Header />
+          {children}
+        </body>
+      </Provider>
     </html>
   );
 }
