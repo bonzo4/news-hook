@@ -1,19 +1,31 @@
-import { useState } from "react";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+import { Database } from "../supabase/types";
 
 type Tag = {
   name: string;
-  id: string;
-  selected: boolean;
 };
 
-export function useTags() {
-  const [tags, setTags] = useState<Tag[]>([
-    { name: "Tag 1", id: "1", selected: false },
-    { name: "Tag 2", id: "2", selected: false },
-    { name: "Tag 3", id: "3", selected: false },
-    { name: "Tag 4", id: "4", selected: false },
-    { name: "Tag 5", id: "5", selected: false },
-  ]);
+type useTagsOptions = {
+  supabase: SupabaseClient<Database>;
+};
+
+export function useTags({ supabase }: useTagsOptions) {
+  const [tags, setTags] = useState<Tag[]>([]);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      const { data: tags, error } = await supabase.from("tags").select("*");
+      if (error) {
+        console.error(error);
+        return;
+      }
+      if (tags) {
+        setTags(tags);
+      }
+    };
+    fetchTags();
+  }, [supabase]);
 
   return [tags, setTags] as const;
 }

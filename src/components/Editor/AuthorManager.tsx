@@ -1,10 +1,11 @@
 import { SetStateAction, useState } from "react";
 import Input from "../Input";
-import { Embed } from "@/lib/atoms";
+import { EmbedData } from "@/lib/data/EmbedData";
+import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 
 type AuthorManagerProps = {
-  embed: Embed;
-  setEmbeds: (args_0: SetStateAction<Embed[]>) => void;
+  embed: EmbedData;
+  setEmbeds: (args_0: SetStateAction<EmbedData[]>) => void;
 };
 
 export default function AuthorManager({
@@ -57,7 +58,7 @@ export default function AuthorManager({
         ...embed,
         author: {
           ...embed.author,
-          iconUrl: value.length !== 0 ? value : undefined,
+          icon_url: value.length !== 0 ? value : undefined,
         },
       });
       return newEmbeds;
@@ -71,7 +72,7 @@ export default function AuthorManager({
           onClick={() => setExpanded(!expanded)}
           className="flex items-center justify-center bg-primary-bg text-white rounded-md"
         >
-          {expanded ? "▼" : "▶"}
+          {expanded ? <IoIosArrowDown /> : <IoIosArrowForward />}
         </button>
         <span className="">Author</span>
       </div>
@@ -81,19 +82,21 @@ export default function AuthorManager({
             label="Author"
             className="w-full"
             charLimit={256}
-            value={""}
             onChange={(event) => onAuthorChange(event.target.value)}
+            value={embed.author?.name}
           />
           <div className="flex flex-row w-full items-center justify-start space-x-1">
             <Input
               label="Author URL"
               className="w-full"
               onChange={(event) => onAuthorUrlChange(event.target.value)}
+              value={embed.author?.url}
             />
             <Input
               label="Author Icon URL"
               className="w-full"
               onChange={(event) => onAuthorIconUrlChange(event.target.value)}
+              value={embed.author?.icon_url}
             />
           </div>
         </div>

@@ -1,35 +1,21 @@
 import { atom } from "jotai";
-import { Interaction } from "./types";
+import { Database } from "./supabase/types";
+import { EmbedData } from "./data/EmbedData";
 
 type EditorDisplay = "editor" | "preview" | "split";
 export const editorDisplayAtom = atom<EditorDisplay>("split");
 
-export type Embed = {
-  id: number;
-  expanded?: boolean;
-  tags: string[];
-  author: {
-    name: string;
-    url?: string;
-    iconUrl?: string;
-  };
-  title: string;
-  description: string;
-  url?: string;
-  color: string;
-  fields?: {
-    name: string;
-    value: string;
-    inline?: boolean;
-  }[];
-  imageUrl?: string;
-  thumbnailUrl?: string;
-  footer?: {
-    text: string;
-    timestamp: Date;
-    iconUrl: string;
-  };
-  interactions?: Interaction[];
-};
+export const reactionsAtom = atom<{ emoji: string; embedId: number }[]>([]);
 
-export const embedAtom = atom<Embed[]>([]);
+export const titleAtom = atom<string | null>(null);
+
+type Tag = Database["public"]["Tables"]["tags"]["Row"];
+type VanityTag = Database["public"]["Tables"]["vanity_tags"]["Row"];
+
+export const selectedTagsAtom = atom<Tag[]>([]);
+
+export const selectedVanityTagsAtom = atom<VanityTag[]>([]);
+
+export const scheduledAtAtom = atom<Date | null>(null);
+
+export const embedAtom = atom<EmbedData[]>([]);

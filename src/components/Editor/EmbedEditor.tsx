@@ -2,8 +2,14 @@ import { embedAtom } from "@/lib/atoms";
 import { useAtom } from "jotai";
 import { PrimaryButton } from "../PrimaryButton";
 import EmbedManager from "./EmbedManager";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { Database } from "@/lib/supabase/types";
 
-export default function EmbedEditor() {
+type EmbedEditorProps = {
+  supabase: SupabaseClient<Database>;
+};
+
+export default function EmbedEditor({ supabase }: EmbedEditorProps) {
   const [embeds, setEmbeds] = useAtom(embedAtom);
 
   const addEmbed = () => {
@@ -13,13 +19,18 @@ export default function EmbedEditor() {
         ...prevEmbeds,
         {
           id: lastEmbed ? lastEmbed.id + 1 : 0,
+          expanded: true,
           title: "Title",
-          description: "Description",
           color: "#ffffff",
-          tags: [],
           author: {
             name: "",
           },
+          tag: "all",
+          image: {
+            url: "https://api.syndicatenetwork.io/storage/v1/object/public/News%20Images/GrayNonbanner.jpg?t=2024-03-29T06%3A14%3A19.425Z",
+          },
+          interactions: [],
+          reactions: [],
         },
       ];
     });
@@ -29,6 +40,7 @@ export default function EmbedEditor() {
     <div className="flex flex-col w-full space-y-5">
       {embeds.map((embed, index) => (
         <EmbedManager
+          supabase={supabase}
           key={embed.id}
           index={index}
           embed={embed}

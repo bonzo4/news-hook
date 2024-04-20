@@ -2,10 +2,34 @@
 
 import { SecondaryButton } from "@/components/SecondaryButton";
 import { editorDisplayAtom } from "@/lib/atoms";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
 import { useAtom } from "jotai";
+import { useRouter } from "next/navigation";
 
-export default function Header() {
+type HeaderProps = {
+  user: User | null;
+};
+
+export default function Header({ user }: HeaderProps) {
   const [editorDisplay, setEditorDisplay] = useAtom(editorDisplayAtom);
+  const router = useRouter();
+
+  const supabase = createSupabaseBrowserClient();
+
+  const handleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "discord",
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_URL!}/auth/callback`,
+      },
+    });
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.refresh();
+  };
 
   return (
     <header className="flex flex-row items-center justify-between w-full p-4 bg-primary-bg text-white shadow-lg">
@@ -13,21 +37,35 @@ export default function Header() {
         Global Hook
       </SecondaryButton>
       <div className="flex flex-row space-x-2">
-        {editorDisplay !== "editor" && (
-          <SecondaryButton
-            className="md:hidden"
-            onClick={() => setEditorDisplay("editor")}
-          >
-            Editor
-          </SecondaryButton>
+        {user && (
+          <div className="flex flex-row space-x-2">
+            {editorDisplay !== "editor" && (
+              <SecondaryButton
+                className="md:hidden"
+                onClick={() => setEditorDisplay("editor")}
+              >
+                Editor
+              </SecondaryButton>
+            )}
+            {editorDisplay !== "preview" && (
+              <SecondaryButton
+                className="md:hidden"
+                onClick={() => setEditorDisplay("preview")}
+              >
+                Preview
+              </SecondaryButton>
+            )}
+          </div>
         )}
-        {editorDisplay !== "preview" && (
-          <SecondaryButton
-            className="md:hidden"
-            onClick={() => setEditorDisplay("preview")}
-          >
-            Preview
-          </SecondaryButton>
+        {user ? (
+          <div className="flex flex-row space-x-2">
+            <SecondaryButton>Profile</SecondaryButton>
+            <SecondaryButton onClick={() => handleLogout()}>
+              Logout
+            </SecondaryButton>
+          </div>
+        ) : (
+          <SecondaryButton onClick={() => handleLogin()}>Login</SecondaryButton>
         )}
       </div>
     </header>

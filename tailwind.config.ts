@@ -10,8 +10,8 @@ const config: Config = {
     extend: {
       colors: {
         primary: "#5865F2",
-        "primary-bg": "#282b30",
-        "secondary-bg": "#1e2124",
+        "primary-bg": "#313338",
+        "secondary-bg": "#2b2d31",
       },
       //   backgroundImage: {
       //     "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
