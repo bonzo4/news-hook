@@ -4,6 +4,6 @@ export type Direct = {
 };
 
 export const defaultDirect = (lastInteractionId?: number): Direct => ({
-  id: lastInteractionId ? lastInteractionId + 1 : 0,
+  id: lastInteractionId ? lastInteractionId + 1 : 1,
   type: "DIRECT",
 });

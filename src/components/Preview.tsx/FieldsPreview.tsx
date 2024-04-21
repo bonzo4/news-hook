@@ -28,8 +28,6 @@ export default function FieldsPreview({ fields }: FieldsPreviewProps) {
     return acc;
   }, [] as FieldData[][]);
 
-  console.log(sortInlineFields);
-
   return (
     <div className="flex flex-col items-start justify-center space-y-2 text-sm">
       {sortInlineFields.map((fields, index) => (

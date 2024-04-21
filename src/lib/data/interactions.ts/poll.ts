@@ -13,7 +13,7 @@ export type Poll = {
 };
 
 export const defaultPoll = (lastInteractionId?: number): Poll => ({
-  id: lastInteractionId ? lastInteractionId + 1 : 0,
+  id: lastInteractionId ? lastInteractionId + 1 : 1,
   question: "",
   type: "POLL",
   choices: [],

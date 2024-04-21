@@ -3,6 +3,7 @@ import { PrimaryButton } from "@/components/PrimaryButton";
 import { EmbedData } from "@/lib/data/EmbedData";
 import { Poll } from "@/lib/data/interactions.ts/poll";
 import { SetStateAction } from "react";
+import PollChoiceManager from "./PollChoiceManager";
 
 type PollManagerProps = {
   embed: EmbedData;
@@ -69,9 +70,9 @@ export default function PollManager({
 
   const addChoice = () => {
     setEmbeds((prevEmbeds) => {
-      const embedIndex = prevEmbeds.findIndex((e) => e.id === poll.id);
+      const embedIndex = prevEmbeds.findIndex((e) => e.id === embed.id);
       if (embedIndex === -1) return prevEmbeds;
-      const newEmbeds = prevEmbeds.filter((e) => e.id !== poll.id);
+      const newEmbeds = prevEmbeds.filter((e) => e.id !== embed.id);
       const interactionIndex = embed.interactions.findIndex(
         (i) => i.id === poll.id
       );
@@ -117,6 +118,11 @@ export default function PollManager({
             checked={poll.randomized}
             onChange={(event) => handledRandomizeChange(event.target.checked)}
           />
+        </div>
+        <div className="flex flex-col space-y-2 items-center justify-center">
+        {poll.choices.map((choice) => (
+          <PollChoiceManager key={choice.id} embed={embed} interaction={poll} choiceId={choice.id} setEmbeds={setEmbeds} />
+        ))}
         </div>
         <PrimaryButton onClick={addChoice}>Add Choice</PrimaryButton>
       </div>

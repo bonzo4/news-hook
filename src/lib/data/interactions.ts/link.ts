@@ -8,7 +8,7 @@ export type Link = {
 
 export function defaultLink(lastInteractionId?: number): Link {
   return {
-    id: lastInteractionId ? lastInteractionId + 1 : 0,
+    id: lastInteractionId ? lastInteractionId + 1 : 1,
     url: "",
     text: "",
     emoji: "",

@@ -18,7 +18,6 @@ export function formatDiscordText(text: string): string {
 
   const newText = text.replace(emojiRegex, emojiSubst).replace(regex, subst);
 
-  console.log(newText);
 
   return newText;
 }

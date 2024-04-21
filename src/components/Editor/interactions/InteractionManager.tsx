@@ -35,9 +35,8 @@ export default function InteractionManager({
         interactions: [...(embed.interactions ?? []), defaultPoll(lastId)],
       });
       return newEmbeds;
+      
     });
-
-    console.log(embed);
   };
 
   const addQuiz = () => {

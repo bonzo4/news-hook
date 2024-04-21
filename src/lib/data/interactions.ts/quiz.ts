@@ -14,7 +14,7 @@ export type Choice = {
 };
 
 export const defaultQuiz = (lastInteractionId?: number): Quiz => ({
-  id: lastInteractionId ? lastInteractionId + 1 : 0,
+  id: lastInteractionId ? lastInteractionId + 1 : 1,
   question: "",
   answer: "",
   type: "QUIZ",

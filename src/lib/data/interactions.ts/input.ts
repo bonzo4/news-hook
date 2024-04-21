@@ -5,7 +5,7 @@ export type Input = {
 };
 
 export const defaultInput = (lastInteractionId?: number): Input => ({
-  id: lastInteractionId ? lastInteractionId + 1 : 0,
+  id: lastInteractionId ? lastInteractionId + 1 : 1,
   question: "",
   type: "INPUT",
 });

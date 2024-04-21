@@ -36,7 +36,6 @@ export const emoji: MarkdownRule = {
     }
 
     const url = getEmojiUrl(emoji);
-    console.log(url);
 
     return {
       name,

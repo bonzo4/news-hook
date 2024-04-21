@@ -8,7 +8,7 @@ export type Promo = {
 };
 
 export const defaultPromo = (lastInteractionId?: number): Promo => ({
-  id: lastInteractionId ? lastInteractionId + 1 : 0,
+  id: lastInteractionId ? lastInteractionId + 1 : 1,
   twitterId: "",
   twitterUrl: "",
   tweetId: "",

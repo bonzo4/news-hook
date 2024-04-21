@@ -4,6 +4,6 @@ export type Profile = {
 };
 
 export const defaultProfile = (lastInteractionId?: number): Profile => ({
-  id: lastInteractionId ? lastInteractionId + 1 : 0,
+  id: lastInteractionId ? lastInteractionId + 1 : 1,
   type: "PROFILE",
 });

@@ -6,7 +6,7 @@ export type Wallet = {
 };
 
 export const defaultWallet = (lastInteractionId?: number): Wallet => ({
-  id: lastInteractionId ? lastInteractionId + 1 : 0,
+  id: lastInteractionId ? lastInteractionId + 1 : 1,
   type: "WALLET",
   sol: false,
   eth: false,
