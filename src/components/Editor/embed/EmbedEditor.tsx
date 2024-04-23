@@ -6,7 +6,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "@/lib/supabase/types";
 import TagManager from "../TagManager";
 import VanityTagManager from "../VanityTagManager";
-import { useStaffUser } from "@/lib/hooks/useUser";
+import { StaffRole, useStaffUser } from "@/lib/hooks/useUser";
 import ScheduleManager from "../ScheduleManager";
 import { EmbedData } from "@/lib/data/EmbedData";
 
@@ -14,15 +14,15 @@ type EmbedEditorProps = {
   supabase: SupabaseClient<Database>;
   embeds: EmbedData[];
   setEmbeds: (args_0: SetStateAction<EmbedData[]>) => void;
+  staffRole: StaffRole;
 };
 
 export default function EmbedEditor({
   supabase,
   embeds,
   setEmbeds,
+  staffRole,
 }: EmbedEditorProps) {
-  const [staffRole] = useStaffUser({ supabase });
-
   const addEmbed = () => {
     setEmbeds((prevEmbeds) => {
       const lastEmbed = prevEmbeds.at(-1);

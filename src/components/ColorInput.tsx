@@ -1,7 +1,7 @@
 import { MuiColorInput } from "mui-color-input";
 
 type InputProps = {
-  color?: string;
+  color: string;
   label: string;
   onColorChange: (value: string) => void;
 } & React.ComponentPropsWithoutRef<"input">;

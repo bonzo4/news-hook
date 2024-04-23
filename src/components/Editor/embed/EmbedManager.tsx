@@ -19,7 +19,6 @@ import {
 import EmbedPresetManager from "./EmbedPresetManager";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "@/lib/supabase/types";
-import { BsTrash } from "react-icons/bs";
 
 type EmbedManagerProps = {
   supabase: SupabaseClient<Database>;

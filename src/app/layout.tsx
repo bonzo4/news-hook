@@ -33,7 +33,7 @@ export default async function RootLayout({
     .eq("user_id", user ? user.id : "")
     .single();
 
-  if (!data) {
+  if (user && !data) {
     await supabase.auth.signOut();
     redirect("/");
   }
@@ -53,13 +53,7 @@ export default async function RootLayout({
           )}
         >
           <Header user={user} />
-          {user ? (
-            children
-          ) : (
-            <div className="flex flex-row grow w-full items-center justify-center">
-              Not logged in
-            </div>
-          )}
+          {children}
         </body>
       </Provider>
     </html>

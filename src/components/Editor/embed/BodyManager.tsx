@@ -81,7 +81,7 @@ export default function BodyManager({ embed, setEmbeds }: BodyManagerProps) {
       {expanded && (
         <div className="flex flex-col w-full items-center justify-start space-y-1">
           <ColorInput
-            color={embed.color}
+            color={embed.color || "#ffffff"}
             label="Color"
             onColorChange={onColorChange}
           />

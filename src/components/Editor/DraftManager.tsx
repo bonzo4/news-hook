@@ -83,11 +83,7 @@ export default function DraftManager({
                 icon_url: embed.footerIcon,
               }
             : undefined,
-          image: embed.image
-            ? {
-                url: embed.image,
-              }
-            : embed.gallery > 0
+          image: embed.gallery[0]
             ? {
                 url: embed.gallery[0],
               }
@@ -136,9 +132,9 @@ export default function DraftManager({
   };
 
   return (
-    <div className="flex flex-row space-x-3 w-full">
+    <div className="flex flex-row space-x-3 w-full justify-end items-end">
       <Dialog>
-        <DialogTrigger className="px-[10px] py-1 text-white bg-secondary-bg rounded-sm border-2 border-white border-opacity-25 hover:bg-opacity-25 hover:bg-secondary-bg hover:border-opacity-50 transition-colors duration-200 ease-in-out">
+        <DialogTrigger className="w-[130px] px-[10px] py-1 text-white bg-secondary-bg rounded-sm border-2 border-white border-opacity-25 hover:bg-opacity-25 hover:bg-secondary-bg hover:border-opacity-50 transition-colors duration-200 ease-in-out">
           Load Draft
         </DialogTrigger>
         <DialogContent className="bg-primary-bg w-full">
@@ -192,7 +188,9 @@ export default function DraftManager({
         value={draftTitle}
         required={true}
       />
-      <SecondaryButton onClick={() => saveDraft()}>Save Draft</SecondaryButton>
+      <SecondaryButton onClick={() => saveDraft()} className="w-[130px]">
+        Save Draft
+      </SecondaryButton>
     </div>
   );
 }
