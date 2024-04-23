@@ -1,19 +1,24 @@
-import InputColor, { Color } from "react-input-color";
+import { MuiColorInput } from "mui-color-input";
 
 type InputProps = {
-  color: string;
+  color?: string;
   label: string;
-  onColorChange: (color: Color) => void;
+  onColorChange: (value: string) => void;
 } & React.ComponentPropsWithoutRef<"input">;
 
-export default function ColorInput(props: InputProps) {
+export default function ColorInput({
+  color,
+  label,
+  onColorChange,
+}: InputProps) {
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-row items-center justify-start space-x-1">
-        <span className="text-white">{props.label}</span>
+        <span className="text-white">{label}</span>
       </div>
-      <div></div>
-      <InputColor initialValue="#ffffff" onChange={props.onColorChange} />
+      <div className="bg-white w-fit">
+        <MuiColorInput format="hex" value={color} onChange={onColorChange} />
+      </div>
     </div>
   );
 }

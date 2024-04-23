@@ -1,16 +1,27 @@
 import { embedAtom } from "@/lib/atoms";
-import { useAtom } from "jotai";
-import { PrimaryButton } from "../PrimaryButton";
+import { SetStateAction, useAtom } from "jotai";
+import { PrimaryButton } from "../../PrimaryButton";
 import EmbedManager from "./EmbedManager";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "@/lib/supabase/types";
+import TagManager from "../TagManager";
+import VanityTagManager from "../VanityTagManager";
+import { useStaffUser } from "@/lib/hooks/useUser";
+import ScheduleManager from "../ScheduleManager";
+import { EmbedData } from "@/lib/data/EmbedData";
 
 type EmbedEditorProps = {
   supabase: SupabaseClient<Database>;
+  embeds: EmbedData[];
+  setEmbeds: (args_0: SetStateAction<EmbedData[]>) => void;
 };
 
-export default function EmbedEditor({ supabase }: EmbedEditorProps) {
-  const [embeds, setEmbeds] = useAtom(embedAtom);
+export default function EmbedEditor({
+  supabase,
+  embeds,
+  setEmbeds,
+}: EmbedEditorProps) {
+  const [staffRole] = useStaffUser({ supabase });
 
   const addEmbed = () => {
     setEmbeds((prevEmbeds) => {
@@ -52,6 +63,18 @@ export default function EmbedEditor({ supabase }: EmbedEditorProps) {
         <PrimaryButton onClick={addEmbed} className="w-auto">
           Add Embed
         </PrimaryButton>
+      </div>
+
+      <div className="flex flex-col space-y-4">
+        <TagManager supabase={supabase} />
+        <VanityTagManager supabase={supabase} />
+        {staffRole && staffRole.staff_role === "ADMIN" && (
+          <ScheduleManager
+            supabase={supabase}
+            staffRole={staffRole}
+            embeds={embeds}
+          />
+        )}
       </div>
     </div>
   );

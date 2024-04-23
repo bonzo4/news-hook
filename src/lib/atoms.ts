@@ -9,12 +9,12 @@ export const reactionsAtom = atom<{ emoji: string; embedId: number }[]>([]);
 
 export const titleAtom = atom<string | null>(null);
 
-type Tag = Database["public"]["Tables"]["tags"]["Row"];
+export type Tag = Database["public"]["Tables"]["tags"]["Row"];
 type VanityTag = Database["public"]["Tables"]["vanity_tags"]["Row"];
 
-export const selectedTagsAtom = atom<Tag[]>([]);
+export const selectedTagsAtom = atom<string[]>([]);
 
-export const selectedVanityTagsAtom = atom<VanityTag[]>([]);
+export const selectedVanityTagsAtom = atom<string[]>([]);
 
 export const scheduledAtAtom = atom<Date | null>(null);
 

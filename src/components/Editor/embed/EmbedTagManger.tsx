@@ -5,17 +5,17 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { SetStateAction, useState } from "react";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 
-type TagManagerProps = {
+type EmbedTagManagerProps = {
   embed: EmbedData;
   supabase: SupabaseClient<Database>;
   setEmbeds: (args_0: SetStateAction<EmbedData[]>) => void;
 };
 
-export default function TagManager({
+export default function EmbedTagManager({
   embed,
   setEmbeds,
   supabase,
-}: TagManagerProps) {
+}: EmbedTagManagerProps) {
   const [expanded, setExpanded] = useState(false);
   const [tags] = useTags({ supabase });
 

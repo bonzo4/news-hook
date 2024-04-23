@@ -1,8 +1,8 @@
 import { EmbedData } from "@/lib/data/EmbedData";
 import { SetStateAction, useState } from "react";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import Input from "../Input";
-import TextAreaInput from "../TextAreatInput";
+import Input from "../../Input";
+import TextAreaInput from "../../TextAreatInput";
 
 type FooterManagerProps = {
   embed: EmbedData;
@@ -76,7 +76,7 @@ export default function FooterManager({
           <TextAreaInput
             label="Footer"
             className="w-full"
-            charLimit={2048}
+            limit={2048}
             onChange={(event) => handleFooterChange(event.target.value)}
             value={embed.footer?.text}
           />

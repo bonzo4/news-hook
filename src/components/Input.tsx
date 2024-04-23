@@ -2,7 +2,8 @@ import { cn } from "@/lib/utils";
 
 type InputProps = {
   label?: string;
-  charLimit?: number;
+  limit?: number;
+  required?: boolean;
 } & React.ComponentPropsWithoutRef<"input">;
 
 export default function Input(props: InputProps) {
@@ -11,9 +12,10 @@ export default function Input(props: InputProps) {
       {props.label && (
         <div className="flex flex-row items-center justify-start space-x-1">
           <span className="text-white">{props.label}</span>
-          {props.charLimit && typeof props.value === "string" && (
+          {props.required && <span className="text-[#FF6666]">*</span>}
+          {props.limit && typeof props.value === "string" && (
             <span className="text-white text-opacity-50">
-              {props.value.length || 0}/{props.charLimit}
+              {props.value.length || 0}/{props.limit}
             </span>
           )}
         </div>
@@ -29,6 +31,7 @@ export default function Input(props: InputProps) {
           "p-1",
           props.className
         )}
+        style={{ borderColor: props.required && !props.value ? "#FF6666" : "" }}
       />
     </div>
   );

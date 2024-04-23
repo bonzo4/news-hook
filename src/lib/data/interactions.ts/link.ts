@@ -1,4 +1,4 @@
-export type Link = {
+export type LinkInteraction = {
   id: number;
   url: string;
   text: string;
@@ -6,7 +6,7 @@ export type Link = {
   type: "LINK";
 };
 
-export function defaultLink(lastInteractionId?: number): Link {
+export function defaultLink(lastInteractionId?: number): LinkInteraction {
   return {
     id: lastInteractionId ? lastInteractionId + 1 : 1,
     url: "",

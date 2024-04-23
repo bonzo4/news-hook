@@ -1,5 +1,5 @@
 import { SetStateAction, useState } from "react";
-import Input from "../Input";
+import Input from "../../Input";
 import { EmbedData } from "@/lib/data/EmbedData";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 
@@ -61,6 +61,7 @@ export default function ImageManager({ embed, setEmbeds }: ImageManagerProps) {
             className="w-full"
             onChange={(event) => handleImageUrlChange(event.target.value)}
             value={embed.image?.url}
+            required={true}
           />
           <Input
             label="Thumbnail Url"

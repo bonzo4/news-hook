@@ -2,6 +2,7 @@
 
 import { SecondaryButton } from "@/components/SecondaryButton";
 import { editorDisplayAtom } from "@/lib/atoms";
+import { useStaffUser } from "@/lib/hooks/useUser";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useAtom } from "jotai";
@@ -12,10 +13,10 @@ type HeaderProps = {
 };
 
 export default function Header({ user }: HeaderProps) {
-  const [editorDisplay, setEditorDisplay] = useAtom(editorDisplayAtom);
-  const router = useRouter();
-
   const supabase = createSupabaseBrowserClient();
+  const [editorDisplay, setEditorDisplay] = useAtom(editorDisplayAtom);
+  const [staffRole] = useStaffUser({ supabase });
+  const router = useRouter();
 
   const handleLogin = async () => {
     await supabase.auth.signInWithOAuth({
@@ -57,9 +58,9 @@ export default function Header({ user }: HeaderProps) {
             )}
           </div>
         )}
-        {user ? (
+        {staffRole ? (
           <div className="flex flex-row space-x-2">
-            <SecondaryButton>Profile</SecondaryButton>
+            <SecondaryButton>{staffRole.staff_role}</SecondaryButton>
             <SecondaryButton onClick={() => handleLogout()}>
               Logout
             </SecondaryButton>

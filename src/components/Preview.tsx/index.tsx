@@ -5,7 +5,6 @@ import authorIcon from "@/public/author-icon.png";
 import EmbedPreview from "./EmbedPreview";
 import { ThemeProvider } from "styled-components";
 import { DEFAULT_THEME } from "@/lib/settings/defaultPreferences";
-import { GlobalStyle } from "@/lib/theming/GlobalStyle";
 
 export default function Preview() {
   const [embeds] = useAtom(embedAtom);

@@ -1,53 +1,39 @@
 import Input from "@/components/Input";
-import { SecondaryButton } from "@/components/SecondaryButton";
+import { PrimaryButton } from "@/components/PrimaryButton";
 import { EmbedData } from "@/lib/data/EmbedData";
 import { Poll } from "@/lib/data/interactions.ts/poll";
-import { Quiz } from "@/lib/data/interactions.ts/quiz";
 import { SetStateAction } from "react";
+import PollChoiceManager from "./PollChoiceManager";
 
-type PollChoiceManagerProps = {
+type PollManagerProps = {
   embed: EmbedData;
-  interaction: Poll | Quiz;
-  choiceId: number;
+  pollId: number;
   setEmbeds: (args_0: SetStateAction<EmbedData[]>) => void;
 };
 
-export default function PollChoiceManager({
+export default function PollManager({
   embed,
-  interaction,
-  choiceId,
+  pollId,
   setEmbeds,
-}: PollChoiceManagerProps) {
-  const choice = interaction.choices.find((c) => c.id === choiceId);
+}: PollManagerProps) {
+  const poll = embed.interactions.find((i) => i.id === pollId) as Poll;
 
-  if (!choice) return null;
-
-  const handleChoiceTextChange = (value: string) => {
+  const handleQuestionChange = (value: string) => {
     setEmbeds((prevEmbeds) => {
       const embedIndex = prevEmbeds.findIndex((e) => e.id === embed.id);
       if (embedIndex === -1) return prevEmbeds;
       const newEmbeds = prevEmbeds.filter((e) => e.id !== embed.id);
       const interactionIndex = embed.interactions.findIndex(
-        (i) => i.id === interaction.id
+        (i) => i.id === poll.id
       );
       if (interactionIndex === -1) return prevEmbeds;
       const newInteractions = embed.interactions.filter(
-        (i) => i.id !== interaction.id
+        (i) => i.id !== poll.id
       );
       if (!newInteractions) return prevEmbeds;
-      const newChoices = interaction.choices.filter((c) => c.id !== choiceId);
-      if (!newChoices) return prevEmbeds;
-      newChoices.splice(
-        newChoices.findIndex((c) => c.id === choiceId),
-        0,
-        {
-          ...choice,
-          text: value,
-        }
-      );
       newInteractions.splice(interactionIndex, 0, {
-        ...interaction,
-        choices: newChoices,
+        ...poll,
+        question: value,
       });
       newEmbeds.splice(embedIndex, 0, {
         ...embed,
@@ -57,32 +43,22 @@ export default function PollChoiceManager({
     });
   };
 
-  const handleChoiceEmojiChange = (value: string) => {
+  const handledRandomizeChange = (value: boolean) => {
     setEmbeds((prevEmbeds) => {
       const embedIndex = prevEmbeds.findIndex((e) => e.id === embed.id);
       if (embedIndex === -1) return prevEmbeds;
       const newEmbeds = prevEmbeds.filter((e) => e.id !== embed.id);
       const interactionIndex = embed.interactions.findIndex(
-        (i) => i.id === interaction.id
+        (i) => i.id === poll.id
       );
       if (interactionIndex === -1) return prevEmbeds;
       const newInteractions = embed.interactions.filter(
-        (i) => i.id !== interaction.id
+        (i) => i.id !== poll.id
       );
       if (!newInteractions) return prevEmbeds;
-      const newChoices = interaction.choices.filter((c) => c.id !== choiceId);
-      if (!newChoices) return prevEmbeds;
-      newChoices.splice(
-        newChoices.findIndex((c) => c.id === choiceId),
-        0,
-        {
-          ...choice,
-          emoji: value,
-        }
-      );
       newInteractions.splice(interactionIndex, 0, {
-        ...interaction,
-        choices: newChoices,
+        ...poll,
+        randomized: value,
       });
       newEmbeds.splice(embedIndex, 0, {
         ...embed,
@@ -90,26 +66,32 @@ export default function PollChoiceManager({
       });
       return newEmbeds;
     });
-  }
+  };
 
-  const handleDeleteChoice = () => {
+  const addChoice = () => {
     setEmbeds((prevEmbeds) => {
       const embedIndex = prevEmbeds.findIndex((e) => e.id === embed.id);
       if (embedIndex === -1) return prevEmbeds;
       const newEmbeds = prevEmbeds.filter((e) => e.id !== embed.id);
       const interactionIndex = embed.interactions.findIndex(
-        (i) => i.id === interaction.id
+        (i) => i.id === poll.id
       );
       if (interactionIndex === -1) return prevEmbeds;
       const newInteractions = embed.interactions.filter(
-        (i) => i.id !== interaction.id
+        (i) => i.id !== poll.id
       );
       if (!newInteractions) return prevEmbeds;
-      const newChoices = interaction.choices.filter((c) => c.id !== choiceId);
-      if (!newChoices) return prevEmbeds;
+      const lastId = poll.choices.sort((a, b) => a.id - b.id).at(-1)?.id;
       newInteractions.splice(interactionIndex, 0, {
-        ...interaction,
-        choices: newChoices,
+        ...poll,
+        choices: [
+          ...poll.choices,
+          {
+            id: lastId ? lastId + 1 : 1,
+            text: "",
+            emoji: "",
+          },
+        ],
       });
       newEmbeds.splice(embedIndex, 0, {
         ...embed,
@@ -120,18 +102,39 @@ export default function PollChoiceManager({
   };
 
   return (
-    <div className="flex flex-row w-full space-x-3 items-center justify-start">
+    <div className="flex flex-col space-y-2">
       <Input
-        type="text"
-        value={choice.text}
-        onChange={(e) => handleChoiceTextChange(e.target.value)}
+        label="Question"
+        className="w-full"
+        limit={256}
+        onChange={(event) => handleQuestionChange(event.target.value)}
+        value={poll.question}
+        required={true}
       />
-      <Input
-        type="text"
-        value={choice.text}
-        onChange={(e) => handleChoiceEmojiChange(e.target.value)}
-      />
-      <SecondaryButton onClick={handleDeleteChoice}>Delete</SecondaryButton>
+      <div className="flex flex-row space-x-5 items-end justify-start">
+        <div className="flex flex-col space-y-2 items-center justify-center">
+          <div className="flex flex-row space-x-1 items-center justify-start">
+            <span>Randomize</span>
+            <input
+              type="checkbox"
+              checked={poll.randomized}
+              onChange={(event) => handledRandomizeChange(event.target.checked)}
+            />
+          </div>
+          <PrimaryButton onClick={addChoice}>Add Choice</PrimaryButton>
+        </div>
+        <div className="flex flex-col space-y-2 items-center justify-center">
+          {poll.choices.map((choice, index) => (
+            <PollChoiceManager
+              key={index}
+              embed={embed}
+              poll={poll}
+              choiceId={choice.id}
+              setEmbeds={setEmbeds}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,10 +1,9 @@
 import { SetStateAction, useState } from "react";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import Input from "../Input";
-import ColorInput from "../ColorInput";
 import { EmbedData } from "@/lib/data/EmbedData";
-import { Color } from "react-input-color";
-import TextAreaInput from "../TextAreatInput";
+import ColorInput from "@/components/ColorInput";
+import Input from "@/components/Input";
+import TextAreaInput from "@/components/TextAreatInput";
 
 type BodyManagerProps = {
   embed: EmbedData;
@@ -14,14 +13,14 @@ type BodyManagerProps = {
 export default function BodyManager({ embed, setEmbeds }: BodyManagerProps) {
   const [expanded, setExpanded] = useState(false);
 
-  const onColorChange = (color: Color) => {
+  const onColorChange = (value: string) => {
     setEmbeds((prevEmbeds) => {
       const embedIndex = prevEmbeds.findIndex((e) => e.id === embed.id);
       if (embedIndex === -1) return prevEmbeds;
       const newEmbeds = prevEmbeds.filter((e) => e.id !== embed.id);
       newEmbeds.splice(embedIndex, 0, {
         ...embed,
-        color: color.hex.slice(0, -2),
+        color: value,
       });
       return newEmbeds;
     });
@@ -82,22 +81,21 @@ export default function BodyManager({ embed, setEmbeds }: BodyManagerProps) {
       {expanded && (
         <div className="flex flex-col w-full items-center justify-start space-y-1">
           <ColorInput
-            color={embed.color || "#ffffff"}
+            color={embed.color}
             label="Color"
             onColorChange={onColorChange}
-            value={embed.color || "#ffffff"}
           />
           <Input
             label="Title"
             className="w-full"
-            charLimit={256}
+            limit={256}
             value={embed.title}
             onChange={(event) => onTitleChange(event.target.value)}
           />
           <TextAreaInput
             label="Description"
             className="w-full"
-            charLimit={4096}
+            limit={4096}
             value={embed.description}
             onChange={(event) => onDescriptionChange(event.target.value)}
           />

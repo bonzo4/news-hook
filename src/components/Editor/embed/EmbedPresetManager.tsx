@@ -1,12 +1,12 @@
 import { SetStateAction, useState } from "react";
-import Input from "../Input";
+import Input from "../../Input";
 import { EmbedData } from "@/lib/data/EmbedData";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { usePresets } from "@/lib/hooks/usePresets";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "@/lib/supabase/types";
-import { PrimaryButton } from "../PrimaryButton";
-import { SecondaryButton } from "../SecondaryButton";
+import { PrimaryButton } from "../../PrimaryButton";
+import { SecondaryButton } from "../../SecondaryButton";
 
 type AuthorManagerProps = {
   embed: EmbedData;
@@ -20,24 +20,57 @@ export default function EmbedPresetManager({
   supabase,
 }: AuthorManagerProps) {
   const [expanded, setExpanded] = useState(false);
-  const [preset, setPreset] = useState<{name: string; id?: number;}>({ name: "" });
+  const [preset, setPreset] = useState<{ name: string; id?: number }>({
+    name: "",
+  });
   const [refetch, setRefetch] = useState(false);
 
   const [presets] = usePresets({ supabase, refetch });
 
+  const handlePresetNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const presetMatch = presets.find(
+      (preset) => preset.name === e.target.value
+    );
+    if (presetMatch) {
+      setPreset({ name: presetMatch.name, id: presetMatch.id });
+      return;
+    }
+    setPreset({ name: e.target.value });
+  };
+
   const savePreset = async () => {
     if (preset.name.length === 0) return;
-    const { data, error } = await supabase.from("embed_presets").insert([
-      {
-        name: preset.name,
-        embed_json: JSON.parse(JSON.stringify(embed)),
-      },
-    ]).select().single();
+    if (preset.id) {
+      const { data, error } = await supabase
+        .from("embed_presets")
+        .update({ name: preset.name, embed_json: embed })
+        .eq("id", preset.id)
+        .select()
+        .single();
+      if (error) {
+        console.error(error);
+      }
+      if (data) {
+        setPreset({ name: data.name, id: data.id });
+      }
+      setRefetch(!refetch);
+      return;
+    }
+    const { data, error } = await supabase
+      .from("embed_presets")
+      .insert([
+        {
+          name: preset.name,
+          embed_json: JSON.parse(JSON.stringify(embed)),
+        },
+      ])
+      .select()
+      .single();
     if (error) {
       console.error(error);
-    } 
+    }
     if (data) {
-      setPreset({name: data.name, id: data.id});
+      setPreset({ name: data.name, id: data.id });
     }
     setRefetch(!refetch);
   };
@@ -53,7 +86,7 @@ export default function EmbedPresetManager({
         newEmbeds.splice(embedIndex, 0, embedPreset.embed_json as any);
         return newEmbeds;
       });
-      setPreset({name: embedPreset.name, id: id});
+      setPreset({ name: embedPreset.name, id: id });
     }
   };
 
@@ -64,8 +97,8 @@ export default function EmbedPresetManager({
       .eq("id", id);
     if (error) {
       console.error(error);
-    }   
-    setPreset({name: ""});
+    }
+    setPreset({ name: "" });
     setRefetch(!refetch);
   };
 
@@ -83,28 +116,36 @@ export default function EmbedPresetManager({
       {expanded && (
         <div className="flex flex-col w-full items-start justify-center space-y-1">
           <div className="flex flex-row items-center justify-start space-x-3">
-          <select
-            onChange={(e) => selectPreset(parseInt(e.target.value))}
-            className="bg-primary-bg text-white rounded-md px-2 py-1 border-4 border-secondary-bg"
-          >
-            <option  className="flex flex-row space-x-2" >
-              New Embed
-            </option>
-            {presets.map((presetEmbed, index) => (
-              <option key={index} value={presetEmbed.id} className="flex flex-row space-x-2" selected={presetEmbed.id === preset.id}>
-                {presetEmbed.name}
-              </option>
-            ))}
-          </select>
-          {preset.id && <SecondaryButton onClick={() => deletePreset(preset.id as number)}>
-            Delete
-          </SecondaryButton>}
+            <select
+              onChange={(e) => selectPreset(parseInt(e.target.value))}
+              className="bg-primary-bg text-white rounded-md px-2 py-1 border-4 border-secondary-bg"
+            >
+              <option className="flex flex-row space-x-2">New Embed</option>
+              {presets.map((presetEmbed, index) => (
+                <option
+                  key={index}
+                  value={presetEmbed.id}
+                  className="flex flex-row space-x-2"
+                  selected={presetEmbed.id === preset.id}
+                >
+                  {presetEmbed.name}
+                </option>
+              ))}
+            </select>
+            {preset.id && (
+              <SecondaryButton
+                onClick={() => deletePreset(preset.id as number)}
+              >
+                Delete
+              </SecondaryButton>
+            )}
           </div>
           <div className="flex flex-row w-full items-center justify-start space-x-3">
             <Input
               label="Name"
               value={preset.name}
-              onChange={(e) => setPreset({...preset, name: e.target.value})}
+              onChange={handlePresetNameChange}
+              required={true}
             />
             <PrimaryButton className="mt-5" onClick={() => savePreset()}>
               Save

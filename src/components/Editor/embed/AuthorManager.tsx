@@ -1,5 +1,5 @@
 import { SetStateAction, useState } from "react";
-import Input from "../Input";
+import Input from "../../Input";
 import { EmbedData } from "@/lib/data/EmbedData";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 
@@ -81,7 +81,7 @@ export default function AuthorManager({
           <Input
             label="Author"
             className="w-full"
-            charLimit={256}
+            limit={256}
             onChange={(event) => onAuthorChange(event.target.value)}
             value={embed.author?.name}
           />

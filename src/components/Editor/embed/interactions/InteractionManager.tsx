@@ -1,5 +1,5 @@
 import { SetStateAction, useState } from "react";
-import { PrimaryButton } from "../../PrimaryButton";
+import { PrimaryButton } from "../../../PrimaryButton";
 import { useAtom } from "jotai";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { EmbedData } from "@/lib/data/EmbedData";
@@ -35,7 +35,6 @@ export default function InteractionManager({
         interactions: [...(embed.interactions ?? []), defaultPoll(lastId)],
       });
       return newEmbeds;
-      
     });
   };
 
@@ -151,28 +150,28 @@ export default function InteractionManager({
         <span className="">Interactions</span>
       </div>
       {expanded && (
-        <div className="flex flex-col w-full items-center justify-start space-y-1">
-          <div className="flex flex-row w-full space-x-3 items-center justify-start">
+        <div className="flex flex-col w-full items-center justify-start space-y-2 pl-5">
+          <div className="flex flex-wrap gap-2 w-full items-center justify-start">
             <PrimaryButton onClick={() => addPoll()}>Poll</PrimaryButton>
             <PrimaryButton onClick={() => addQuiz()}>Quiz</PrimaryButton>
             <PrimaryButton onClick={() => addInput()}>Input</PrimaryButton>
-            <PrimaryButton onClick={() => addPromo()}>Promo</PrimaryButton>
+            {/*<PrimaryButton onClick={() => addPromo()}>Promo</PrimaryButton>*/}
             <PrimaryButton onClick={() => addDirect()}>Direct</PrimaryButton>
             <PrimaryButton onClick={() => addProfile()}>Profile</PrimaryButton>
             <PrimaryButton onClick={() => addWallet()}>Wallet</PrimaryButton>
             <PrimaryButton onClick={() => addLink()}>Link</PrimaryButton>
           </div>
+          {embed.interactions &&
+            embed.interactions.map((interaction, index) => (
+              <InteractionEditor
+                key={index}
+                embed={embed}
+                interactionId={interaction.id}
+                setEmbeds={setEmbeds}
+              />
+            ))}
         </div>
       )}
-      {embed.interactions &&
-        embed.interactions.map((interaction, index) => (
-          <InteractionEditor
-            key={index}
-            embed={embed}
-            interactionId={interaction.id}
-            setEmbeds={setEmbeds}
-          />
-        ))}
     </div>
   );
 }

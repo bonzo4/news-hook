@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
+import "../styles/globals.css";
 import Header from "../components/Header";
 import { cn } from "@/lib/utils";
 import { Provider } from "jotai";
@@ -44,7 +44,7 @@ export default async function RootLayout({
         <body
           className={cn(
             ggSans.className,
-            "flex flex-col min-h-screen items-center justify-start bg-primary-bg tracking-wide"
+            "flex flex-col min-h-screen items-center justify-start bg-primary-bg tracking-wide text-white max-h-screen"
           )}
         >
           <Header user={user} />

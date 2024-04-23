@@ -2,22 +2,68 @@ import { ClassValue, clsx } from "clsx";
 import { toHTML } from "discord-markdown";
 import { twMerge } from "tailwind-merge";
 import parse, { domToReact } from "html-react-parser";
+import { Poll } from "./data/interactions.ts/poll";
+import { Quiz } from "./data/interactions.ts/quiz";
+import { InputInteraction } from "./data/interactions.ts/input";
+import { Promo } from "./data/interactions.ts/promo";
+import { LinkInteraction } from "./data/interactions.ts/link";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDiscordText(text: string): string {
-  // replace any instance of [text](link) with an anchor tag <a href="link">text</a>
-  const regex = /\[(.*?)\]\((.*?)\)/g;
-  const subst = `<a href="$2" style={{ color: "#0000ff" }}>1</a>`;
+export function checkPoll(poll: Poll): Poll {
+  if (!poll.question) {
+    throw new Error("Question is required");
+  }
+  if (poll.choices.length < 2) {
+    throw new Error("At least 2 choices are required");
+  }
+  return poll;
+}
 
-  // replace any instace of <:emoji:123456789> with an img tag <img src="https://cdn.discordapp.com/emojis/123456789.png" alt="emoji">
-  const emojiRegex = /<:(.*?):(\d+)>/g;
-  const emojiSubst = `<img src="https://cdn.discordapp.com/emojis/$2.png" alt="$1">`;
+export function checkQuiz(quiz: Quiz): Quiz {
+  if (!quiz.question) {
+    throw new Error("Question is required");
+  }
+  if (!quiz.answer) {
+    throw new Error("Answer is required");
+  }
+  if (quiz.choices.length < 2) {
+    throw new Error("At least 2 choices are required");
+  }
+  return quiz;
+}
 
-  const newText = text.replace(emojiRegex, emojiSubst).replace(regex, subst);
+export function checkInput(input: InputInteraction): InputInteraction {
+  if (!input.question) {
+    throw new Error("Input is required");
+  }
+  return input;
+}
 
+export function checkPromo(promo: Promo): Promo {
+  if (!promo.twitterId) {
+    throw new Error("Twitter ID is required");
+  }
+  if (!promo.twitterUrl || !promo.twitterUrl.includes("twitter.com")) {
+    throw new Error("Twitter URL is required");
+  }
+  if (!promo.tweetId) {
+    throw new Error("Tweet ID is required");
+  }
+  if (!promo.tweetUrl || !promo.tweetUrl.includes("twitter.com")) {
+    throw new Error("Tweet URL is required");
+  }
+  return promo;
+}
 
-  return newText;
+export function checkLink(link: LinkInteraction): LinkInteraction {
+  if (!link.url || !link.url.includes("https://")) {
+    throw new Error("URL is required");
+  }
+  if (!link.text) {
+    throw new Error("Text is required");
+  }
+  return link;
 }

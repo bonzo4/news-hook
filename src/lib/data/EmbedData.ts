@@ -10,7 +10,7 @@ export type EmbedData = {
   description?: string;
   url?: string;
   timestamp?: string;
-  color?: string | null;
+  color?: string;
   footer?: FooterData;
   image?: ImageData;
   thumbnail?: ImageData;

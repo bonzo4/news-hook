@@ -1,5 +1,5 @@
 import { SetStateAction } from "jotai";
-import TagManager from "./TagManger";
+import EmbedTagManager from "./EmbedTagManger";
 import AuthorManager from "./AuthorManager";
 import BodyManager from "./BodyManager";
 import FieldsManager from "./FieldsManager";
@@ -87,7 +87,7 @@ export default function EmbedManager({
     <div
       key={key}
       className={`flex flex-row grow min-h-100 w-full items-center justify-start space-x-3 shadow-md border-l-4 `}
-      style={{ borderColor: embed.color || undefined }}
+      style={{ borderColor: embed.color }}
     >
       <div className="flex flex-col w-full justify-start items-center py-3 px-2 space-y-3">
         <div className="flex flex-row w-full items-center justify-between">
@@ -141,7 +141,7 @@ export default function EmbedManager({
               setEmbeds={setEmbeds}
             />
             <div className="w-full h-[1px] bg-white opacity-10" />
-            <TagManager
+            <EmbedTagManager
               embed={embed}
               supabase={supabase}
               setEmbeds={setEmbeds}

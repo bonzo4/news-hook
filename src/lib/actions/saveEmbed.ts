@@ -1,16 +1,14 @@
 /* eslint-disable no-await-in-loop */
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import type {
-  Input,
-  InteractionType,
-  Link,
-  Poll,
-  Promo,
-  Quiz,
-  Wallet,
-} from "../atoms";
 import { Database } from "../supabase/types";
 import { EmbedData } from "../data/EmbedData";
+import { Interaction } from "../data/interactions.ts";
+import { WalletInteraction } from "../data/interactions.ts/wallet";
+import { Poll } from "../data/interactions.ts/poll";
+import { Quiz } from "../data/interactions.ts/quiz";
+import { InputInteraction } from "../data/interactions.ts/input";
+import { LinkInteraction } from "../data/interactions.ts/link";
+import { Promo } from "../data/interactions.ts/promo";
 
 type StaffRole = Database["public"]["Tables"]["staff_users"]["Row"];
 
@@ -19,7 +17,7 @@ type SaveOptions = {
 };
 
 type SaveTagsOptions = {
-  tags: Database["public"]["Tables"]["tags"]["Row"][];
+  tags: string[];
   newsId: number;
 } & SaveOptions;
 
@@ -28,7 +26,7 @@ export async function saveTags(options: SaveTagsOptions): Promise<void> {
   const tagDocs = tags.map(async (tag) => {
     const { error } = await supabase.from("_news_tags").insert({
       news_id: newsId,
-      tag: tag.name,
+      tag: tag,
     });
     if (error) {
       throw error.message;
@@ -38,7 +36,7 @@ export async function saveTags(options: SaveTagsOptions): Promise<void> {
 }
 
 type SaveVanityTagsOptions = {
-  tags: Database["public"]["Tables"]["vanity_tags"]["Row"][];
+  tags: string[];
   newsId: number;
 } & SaveOptions;
 
@@ -49,7 +47,7 @@ export async function saveVanityTags(
   const tagDocs = tags.map(async (tag) => {
     const { error } = await supabase.from("_news_vanity_tags").insert({
       news_id: newsId,
-      tag: tag.name,
+      tag: tag,
     });
     if (error) {
       throw error.message;
@@ -61,9 +59,6 @@ export async function saveVanityTags(
 type SaveEmbedOptions = {
   content: EmbedData[];
   newsId: number;
-  interactions: InteractionType[];
-  embedTags: { embedId: number; tag: string }[];
-  reactions: { emoji: string; embedId: number }[];
 } & SaveOptions;
 
 type Embed = {
@@ -71,33 +66,30 @@ type Embed = {
 } & Database["public"]["Tables"]["news_embeds"]["Row"];
 
 export async function saveEmbeds(options: SaveEmbedOptions): Promise<Embed[]> {
-  const { content, supabase, newsId, interactions, reactions, embedTags } =
-    options;
+  const { content, supabase, newsId } = options;
   let imageSet = false;
   const embeds = content.map(async (embed, index) => {
+    const embedEdited = {
+      ...embed,
+      color: embed.color ? Number(embed.color.replace("#", "0x")) : undefined,
+    };
     let newsImage = false;
     if (embed.image && !imageSet) {
       newsImage = true;
       imageSet = true;
     }
-    const tag = embedTags.find((i) => i.embedId === embed.id) ?? null;
     const { data: embedDoc, error } = await supabase
       .from("news_embeds")
       .insert({
         news_id: newsId,
-        content: JSON.stringify(embed),
-        interaction_types: interactions
-          .filter((i) => i.embedId === embed.id)
-          .map((interaction) => interaction.type),
+        content: JSON.stringify(embedEdited),
+        interaction_types: embed.interactions.map(
+          (interaction) => interaction.type
+        ),
         order: index,
         news_image: newsImage,
-        tag: tag?.tag ?? null,
-        reactions:
-          reactions.length > 0
-            ? reactions
-                .filter((i) => i.embedId === embed.id)
-                .map((reaction) => reaction.emoji)
-            : null,
+        tag: embed.tag ?? null,
+        reactions: embed.reactions.length > 0 ? embed.reactions : null,
       })
       .select()
       .single();
@@ -106,6 +98,64 @@ export async function saveEmbeds(options: SaveEmbedOptions): Promise<Embed[]> {
     }
     if (!embedDoc) {
       throw new Error("Embed not found");
+    }
+    for (const interaction of embed.interactions) {
+      switch (interaction.type) {
+        case "POLL":
+          await savePoll({
+            poll: interaction,
+            embedId: embedDoc.id,
+            supabase,
+            order: index,
+          });
+          break;
+        case "QUIZ":
+          await saveQuiz({
+            quiz: interaction,
+            embedId: embedDoc.id,
+            supabase,
+            order: index,
+          });
+          break;
+        case "INPUT":
+          await saveInput({
+            input: interaction,
+            embedId: embedDoc.id,
+            supabase,
+            order: index,
+          });
+          break;
+        case "LINK":
+          await saveLink({
+            link: interaction,
+            embedId: embedDoc.id,
+            supabase,
+            order: index,
+          });
+          break;
+        case "DIRECT":
+          await saveDirect({ embedId: embedDoc.id, supabase, order: index });
+          break;
+        case "PROFILE":
+          await saveProfile({ embedId: embedDoc.id, supabase, order: index });
+          break;
+        case "WALLET":
+          await saveWallet({
+            wallet: interaction,
+            embedId: embedDoc.id,
+            supabase,
+            order: index,
+          });
+          break;
+        case "PROMO":
+          await savePromo({
+            promo: interaction,
+            embedId: embedDoc.id,
+            supabase,
+            order: index,
+          });
+          break;
+      }
     }
     return {
       ...embedDoc,
@@ -117,7 +167,6 @@ export async function saveEmbeds(options: SaveEmbedOptions): Promise<Embed[]> {
 }
 
 type SaveNewsOptions = {
-  user: User;
   staffRole: StaffRole;
   title: string;
   scheduledAt: Date;
@@ -128,21 +177,14 @@ type SaveNewsOptions = {
 type DiscordNews = Database["public"]["Tables"]["discord_news"]["Row"];
 
 export async function saveNews(options: SaveNewsOptions): Promise<DiscordNews> {
-  const {
-    supabase,
-    user,
-    staffRole,
-    title,
-    scheduledAt,
-    hasThread,
-    hasMention,
-  } = options;
+  const { supabase, staffRole, title, scheduledAt, hasThread, hasMention } =
+    options;
 
   const { data: news, error } = await supabase
     .from("discord_news")
     .insert({
       title,
-      created_by: user.id,
+      created_by: staffRole.user_id,
       schedule: scheduledAt.toISOString(),
       approved: staffRole.staff_role === "ADMIN",
       approved_at:
@@ -189,7 +231,7 @@ export async function saveProfile(options: SaveInteractionOptions) {
 }
 
 type SaveWalletOptions = {
-  wallet: Wallet;
+  wallet: WalletInteraction;
 } & SaveInteractionOptions;
 
 export async function saveWallet(options: SaveWalletOptions) {
@@ -278,7 +320,7 @@ export async function saveQuiz(options: SaveQuizOptions) {
 }
 
 type SaveInputOptions = {
-  input: Input;
+  input: InputInteraction;
 } & SaveInteractionOptions;
 
 export async function saveInput(options: SaveInputOptions) {
@@ -294,7 +336,7 @@ export async function saveInput(options: SaveInputOptions) {
 }
 
 type SaveLinkOptions = {
-  link: Link;
+  link: LinkInteraction;
 } & SaveInteractionOptions;
 
 export async function saveLink(options: SaveLinkOptions) {

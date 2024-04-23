@@ -7,9 +7,9 @@ import {
   IoIosClose,
   IoIosCopy,
 } from "react-icons/io";
-import { PrimaryButton } from "../PrimaryButton";
-import Input from "../Input";
-import TextAreaInput from "../TextAreatInput";
+import { PrimaryButton } from "../../PrimaryButton";
+import Input from "../../Input";
+import TextAreaInput from "../../TextAreatInput";
 
 type FieldsManagerProps = {
   embed: EmbedData;
@@ -211,7 +211,7 @@ function FieldManager({ field, setEmbeds, index, embedId }: FiledMangerProps) {
             <Input
               label="Field Name"
               className="w-full"
-              charLimit={256}
+              limit={256}
               onChange={(event) => handleFieldNameChange(event.target.value)}
               value={field.name}
             />
