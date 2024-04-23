@@ -12,7 +12,7 @@ export default function Editor({ supabase }: EditorProps) {
   const [embeds, setEmbeds] = useAtom(embedAtom);
 
   return (
-    <div className="flex flex-col items-center justify-start space-y-5 p-3 overflow-y-scroll">
+    <div className="flex flex-col items-center justify-start space-y-5 px-3 py-5 max-h-[90vh] overflow-y-scroll">
       <DraftManager supabase={supabase} embeds={embeds} setEmbeds={setEmbeds} />
       <EmbedEditor supabase={supabase} embeds={embeds} setEmbeds={setEmbeds} />
     </div>

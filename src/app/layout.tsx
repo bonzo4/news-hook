@@ -33,6 +33,11 @@ export default async function RootLayout({
     .eq("user_id", user ? user.id : "")
     .single();
 
+  if (!data) {
+    await supabase.auth.signOut();
+    redirect("/");
+  }
+
   if (data && data.staff_role !== "ADMIN" && data.staff_role !== "WRITER") {
     await supabase.auth.signOut();
     redirect("/");
@@ -44,7 +49,7 @@ export default async function RootLayout({
         <body
           className={cn(
             ggSans.className,
-            "flex flex-col min-h-screen items-center justify-start bg-primary-bg tracking-wide text-white max-h-screen"
+            "flex flex-col min-h-screen items-center justify-start bg-primary-bg tracking-wide text-white "
           )}
         >
           <Header user={user} />

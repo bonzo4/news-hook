@@ -14,7 +14,7 @@ export default function Home() {
   const supabase = createSupabaseBrowserClient();
 
   return (
-    <main className="flex items-start justify-start w-full ">
+    <main className="flex items-start justify-start w-full">
       {editorDisplay === "split" && (
         <div className="flex items-start justify-start w-full">
           <Editor supabase={supabase} />

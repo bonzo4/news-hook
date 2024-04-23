@@ -11,7 +11,7 @@ export default function Preview() {
 
   return (
     <ThemeProvider theme={DEFAULT_THEME}>
-      <div className="flex flex-row items-start justify-start space-x-3 grow w-full p-3">
+      <div className="flex flex-row items-start justify-start space-x-3 grow w-full p-3 max-h-[90vh] overflow-y-scroll">
         <Image
           src={authorIcon}
           alt="Author Icon"
