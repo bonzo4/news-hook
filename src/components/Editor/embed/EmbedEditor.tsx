@@ -1,4 +1,3 @@
-import { embedAtom } from "@/lib/atoms";
 import { SetStateAction, useAtom } from "jotai";
 import { PrimaryButton } from "../../PrimaryButton";
 import EmbedManager from "./EmbedManager";

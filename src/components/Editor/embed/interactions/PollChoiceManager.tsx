@@ -86,7 +86,6 @@ export default function PollChoiceManager({
       });
       return newEmbeds;
     });
-    console.log(poll);
   };
 
   const handleDeleteChoice = () => {

@@ -53,12 +53,10 @@ export default function DraftManager({
     const json = JSON.parse(await data.text());
 
     if (json.messages) {
-      console.log(json.interactions);
       const embeds: EmbedData[] = json.messages[0].embeds.map((embed: any) => {
         const interactions = json.interactions.filter(
           (interaction: any) => interaction.embedId === embed.id
         );
-        console.log(interactions);
         const reactions = json.reactions.filter(
           (reaction: any) => reaction.embedId === embed.id
         );
@@ -98,7 +96,6 @@ export default function DraftManager({
           reactions: reactions,
         };
       });
-      console.log(embeds);
       setEmbeds(embeds);
       return;
     }

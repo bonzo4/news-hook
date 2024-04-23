@@ -22,7 +22,6 @@ import { Database } from "@/lib/supabase/types";
 
 type EmbedManagerProps = {
   supabase: SupabaseClient<Database>;
-  key: number;
   index: number;
   embed: EmbedData;
   embedCount: number;
@@ -31,7 +30,6 @@ type EmbedManagerProps = {
 
 export default function EmbedManager({
   supabase,
-  key,
   index,
   embed,
   embedCount,
@@ -84,7 +82,6 @@ export default function EmbedManager({
 
   return (
     <div
-      key={key}
       className={`flex flex-row grow min-h-100 w-full items-center justify-start space-x-3 shadow-md border-l-4 `}
       style={{ borderColor: embed.color }}
     >
