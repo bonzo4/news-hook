@@ -35,7 +35,7 @@ export default function Header({ user }: HeaderProps) {
   return (
     <header className="flex flex-row items-center justify-between w-full p-4 bg-primary-bg text-white shadow-lg">
       <SecondaryButton onClick={() => setEditorDisplay("split")}>
-        Global Hook
+        News Hook 📰
       </SecondaryButton>
       <div className="flex flex-row space-x-2">
         {user && (
