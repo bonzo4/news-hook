@@ -3,6 +3,7 @@ import PollPreview from "./PollPreview";
 import QuizPreview from "./QuizPreview";
 import { PrimaryButton } from "../PrimaryButton";
 import LinkPreview from "./LinkPreview";
+import PromoPreview from "./PromoPreview";
 
 type InteractionPreviewProps = {
   interaction: Interaction;
@@ -31,5 +32,7 @@ export default function InteractionPreview({
           <PrimaryButton>ETH Wallet</PrimaryButton>
         </div>
       );
+    case "PROMO":
+      return <PromoPreview promo={interaction} />;
   }
 }

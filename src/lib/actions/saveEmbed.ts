@@ -359,11 +359,9 @@ type SavePromoOptions = {
 
 export async function savePromo(options: SavePromoOptions) {
   const { promo, embedId, supabase, order } = options;
-  const { error } = await supabase.from("promos").insert({
+  const { error } = await supabase.from("promo_buttons").insert({
     embed_id: embedId,
-    tweet_id: promo.tweetId,
     tweet_url: promo.tweetUrl,
-    twitter_id: promo.twitterId,
     twitter_url: promo.twitterUrl,
     order,
   });

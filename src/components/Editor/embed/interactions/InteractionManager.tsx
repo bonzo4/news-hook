@@ -155,7 +155,7 @@ export default function InteractionManager({
             <PrimaryButton onClick={() => addPoll()}>Poll</PrimaryButton>
             <PrimaryButton onClick={() => addQuiz()}>Quiz</PrimaryButton>
             <PrimaryButton onClick={() => addInput()}>Input</PrimaryButton>
-            {/*<PrimaryButton onClick={() => addPromo()}>Promo</PrimaryButton>*/}
+            <PrimaryButton onClick={() => addPromo()}>Promo</PrimaryButton>
             <PrimaryButton onClick={() => addDirect()}>Direct</PrimaryButton>
             <PrimaryButton onClick={() => addProfile()}>Profile</PrimaryButton>
             <PrimaryButton onClick={() => addWallet()}>Wallet</PrimaryButton>

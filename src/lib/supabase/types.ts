@@ -906,7 +906,7 @@ export type Database = {
             foreignKeyName: "interactions_promo_id_fkey";
             columns: ["promo_id"];
             isOneToOne: false;
-            referencedRelation: "promos";
+            referencedRelation: "promo_buttons";
             referencedColumns: ["id"];
           },
           {
@@ -1654,15 +1654,13 @@ export type Database = {
           }
         ];
       };
-      promos: {
+      promo_buttons: {
         Row: {
           created_at: string;
           embed_id: number;
           id: number;
           order: number;
-          tweet_id: string | null;
           tweet_url: string | null;
-          twitter_id: string | null;
           twitter_url: string | null;
         };
         Insert: {
@@ -1670,9 +1668,7 @@ export type Database = {
           embed_id: number;
           id?: number;
           order?: number;
-          tweet_id?: string | null;
           tweet_url?: string | null;
-          twitter_id?: string | null;
           twitter_url?: string | null;
         };
         Update: {
@@ -1680,9 +1676,7 @@ export type Database = {
           embed_id?: number;
           id?: number;
           order?: number;
-          tweet_id?: string | null;
           tweet_url?: string | null;
-          twitter_id?: string | null;
           twitter_url?: string | null;
         };
         Relationships: [
@@ -1691,6 +1685,65 @@ export type Database = {
             columns: ["embed_id"];
             isOneToOne: false;
             referencedRelation: "news_embeds";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      promo_interactions: {
+        Row: {
+          created_at: string;
+          guild_id: string | null;
+          id: string;
+          news_id: number | null;
+          promo_button_id: number;
+          type: Database["public"]["Enums"]["promo_action_type"];
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          guild_id?: string | null;
+          id?: string;
+          news_id?: number | null;
+          promo_button_id: number;
+          type: Database["public"]["Enums"]["promo_action_type"];
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          guild_id?: string | null;
+          id?: string;
+          news_id?: number | null;
+          promo_button_id?: number;
+          type?: Database["public"]["Enums"]["promo_action_type"];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "promo_interactions_guild_id_fkey";
+            columns: ["guild_id"];
+            isOneToOne: false;
+            referencedRelation: "guilds";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "promo_interactions_news_id_fkey";
+            columns: ["news_id"];
+            isOneToOne: false;
+            referencedRelation: "discord_news";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "promo_interactions_profile_button_id_fkey";
+            columns: ["promo_button_id"];
+            isOneToOne: false;
+            referencedRelation: "profile_buttons";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "promo_interactions_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "discord_users";
             referencedColumns: ["id"];
           }
         ];

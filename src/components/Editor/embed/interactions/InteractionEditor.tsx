@@ -13,6 +13,7 @@ import QuizManager from "./QuizManager";
 import InputManager from "./InputManager";
 import WalletManager from "./WalletManager";
 import LinkManager from "./LinkManager";
+import PromoManager from "./PromoManager";
 
 type InteractionEditorProps = {
   embed: EmbedData;
@@ -215,6 +216,14 @@ function InteractionSection({
         <WalletManager
           embed={embed}
           walletId={interaction.id}
+          setEmbeds={setEmbeds}
+        />
+      );
+    case "PROMO":
+      return (
+        <PromoManager
+          embed={embed}
+          promoId={interaction.id}
           setEmbeds={setEmbeds}
         />
       );

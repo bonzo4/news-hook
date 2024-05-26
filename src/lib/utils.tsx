@@ -43,16 +43,10 @@ export function checkInput(input: InputInteraction): InputInteraction {
 }
 
 export function checkPromo(promo: Promo): Promo {
-  if (!promo.twitterId) {
-    throw new Error("Twitter ID is required");
-  }
-  if (!promo.twitterUrl || !promo.twitterUrl.includes("twitter.com")) {
+  if (!promo.twitterUrl || !promo.twitterUrl.includes("x.com")) {
     throw new Error("Twitter URL is required");
   }
-  if (!promo.tweetId) {
-    throw new Error("Tweet ID is required");
-  }
-  if (!promo.tweetUrl || !promo.tweetUrl.includes("twitter.com")) {
+  if (!promo.tweetUrl || !promo.tweetUrl.includes("x.com")) {
     throw new Error("Tweet URL is required");
   }
   return promo;

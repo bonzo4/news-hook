@@ -57,6 +57,7 @@ export default function PollChoiceManager({
   };
 
   const handleChoiceEmojiChange = (value: string) => {
+    if (value.includes(" ")) return;
     setEmbeds((prevEmbeds) => {
       const embedIndex = prevEmbeds.findIndex((e) => e.id === embed.id);
       if (embedIndex === -1) return prevEmbeds;
