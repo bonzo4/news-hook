@@ -30,7 +30,7 @@ export default function EmbedPreview({ embeds }: EmbedPreviewProps) {
             <div className="flex flex-row items-start justify-between space-x-3 w-full">
               <div className="flex flex-col items-start justify-center space-y-2">
                 {embed.author && <AuthorPreview author={embed.author} />}
-                {embed.title && embed.url === undefined && (
+                {embed.title && embed.url === "" && (
                   <Markdown
                     content={embed.title}
                     type="embed-header"
