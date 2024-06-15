@@ -72,8 +72,11 @@ export default function EmbedManager({
       const embed = prevEmbeds.find((embed) => embed.id === id);
       if (embed) {
         const newEmbed = { ...embed };
-        const lastEmbed = prevEmbeds.at(-1);
-        newEmbed.id = lastEmbed ? lastEmbed.id + 1 : 0;
+        const embedIds = prevEmbeds.map((e) => e.id);
+        let newId = Math.floor(Math.random() * 100000);
+        while (embedIds.includes(newId)) {
+          newId = Math.floor(Math.random() * 100000);
+        }
         return [...prevEmbeds, newEmbed];
       }
       return prevEmbeds;

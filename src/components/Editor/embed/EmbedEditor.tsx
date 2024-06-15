@@ -25,6 +25,11 @@ export default function EmbedEditor({
   const addEmbed = () => {
     setEmbeds((prevEmbeds) => {
       const lastEmbed = prevEmbeds.at(-1);
+      const embedIds = prevEmbeds.map((e) => e.id);
+      let newId = Math.floor(Math.random() * 100000);
+      while (embedIds.includes(newId)) {
+        newId = Math.floor(Math.random() * 100000);
+      }
       return [
         ...prevEmbeds,
         {

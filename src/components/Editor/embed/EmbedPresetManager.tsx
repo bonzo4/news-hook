@@ -83,7 +83,16 @@ export default function EmbedPresetManager({
         if (embedIndex === -1) return prevEmbeds;
         // remove embed from array and insert at index the new embed
         const newEmbeds = prevEmbeds.filter((e) => e.id !== embed.id);
-        newEmbeds.splice(embedIndex, 0, embedPreset.embed_json as any);
+        // generate a random id for the new embed that doesn't exist in the array
+        const embedIds = newEmbeds.map((e) => e.id);
+        let newId = Math.floor(Math.random() * 100000);
+        while (embedIds.includes(newId)) {
+          newId = Math.floor(Math.random() * 100000);
+        }
+        newEmbeds.splice(embedIndex, 0, {
+          ...(embedPreset.embed_json as any),
+          id: newId,
+        } as any);
         return newEmbeds;
       });
       setPreset({ name: embedPreset.name, id: id });
