@@ -33,7 +33,7 @@ export default function EmbedEditor({
       return [
         ...prevEmbeds,
         {
-          id: lastEmbed ? lastEmbed.id + 1 : 0,
+          id: newId,
           expanded: true,
           title: "Title",
           color: "#ffffff",
