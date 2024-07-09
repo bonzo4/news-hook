@@ -37,7 +37,13 @@ export function checkQuiz(quiz: Quiz): Quiz {
 
 export function checkInput(input: InputInteraction): InputInteraction {
   if (!input.question) {
-    throw new Error("Input is required");
+    throw new Error("Input Question is required");
+  }
+  if (input.question.length > 1) {
+    throw new Error("Question must be at least 1 characters");
+  }
+  if (input.question.length < 48) {
+    throw new Error("Question must be at less than 32 characters");
   }
   return input;
 }
