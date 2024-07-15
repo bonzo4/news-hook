@@ -97,7 +97,7 @@ export default function ScheduleManager({
 
       const scheduledAtMs = scheduledAt.getTime();
 
-      const rebootHours = [1, 7, 13, 19];
+      const rebootHours = [0, 6, 12, 18];
 
       const rebootDates = rebootHours.map((hour) => {
         const date = new Date();
@@ -120,14 +120,14 @@ export default function ScheduleManager({
 
       if (isBeforeReboot) {
         toast.error(
-          "Scheduled time can't be 30 minutes before reboot at 1 AM/PM and 7 AM/PM"
+          "Scheduled time can't be 30 minutes before reboot at 12 AM/PM and 6 AM/PM UTC"
         );
         return;
       }
 
       if (isAfterReboot) {
         toast.error(
-          "Scheduled time can't be 10 minutes after reboot at 1 AM/PM and 7 AM/PM"
+          "Scheduled time can't be 10 minutes after reboot at 1 AM/PM and 7 AM/PM UTC"
         );
         return;
       }
@@ -212,8 +212,8 @@ export default function ScheduleManager({
           required={true}
         />
         <Input
-          label="Scheduled At"
-          type="datetime-local"
+          label="Scheduled At in UTC"
+          type="datetime"
           onChange={(event) => setScheduledAt(new Date(event.target.value))}
           required={true}
         />
