@@ -95,7 +95,8 @@ export default function ScheduleManager({
         return;
       }
 
-      const scheduledAtMs = scheduledAt.getTime();
+      const offset = new Date().getTimezoneOffset() * 60000;
+      const scheduledAtMs = scheduledAt.getTime() - offset;
 
       const rebootHours = [0, 6, 12, 18];
 
@@ -213,7 +214,7 @@ export default function ScheduleManager({
         />
         <Input
           label="Scheduled At in UTC"
-          type="datetime"
+          type="datetime-local"
           onChange={(event) => setScheduledAt(new Date(event.target.value))}
           required={true}
         />
