@@ -95,19 +95,27 @@ export default function ScheduleManager({
         return;
       }
 
-      const offset = new Date().getTimezoneOffset() * 60000;
+      const offset = new Date().getTimezoneOffset() * 60 * 1000;
       const scheduledAtMs = scheduledAt.getTime() - offset;
 
-      const rebootHours = [0, 6, 12, 18];
+      console.log("scheduledAtMs", new Date(scheduledAtMs));
+
+      const rebootHours = [2, 8, 14, 20];
 
       const rebootDates = rebootHours.map((hour) => {
         const date = new Date();
+        date.setDate(scheduledAt.getDate());
         date.setHours(hour);
         date.setMinutes(0);
         date.setSeconds(0);
         return date;
       });
       const rebootTimesMs = rebootDates.map((time) => time.getTime());
+
+      console.log(
+        "rebootTimesMs",
+        rebootTimesMs.map((time) => new Date(time))
+      );
 
       const isBeforeReboot = rebootTimesMs.some((time) => {
         const thirtyMinutesBefore = time - 30 * 60 * 1000;
@@ -128,7 +136,7 @@ export default function ScheduleManager({
 
       if (isAfterReboot) {
         toast.error(
-          "Scheduled time can't be 10 minutes after reboot at 1 AM/PM and 7 AM/PM UTC"
+          "Scheduled time can't be 10 minutes after reboot at 12 AM/PM and 6 AM/PM UTC"
         );
         return;
       }
@@ -193,7 +201,11 @@ export default function ScheduleManager({
 
   const unscheduleNews = async (newsId: number): Promise<void> => {
     try {
-      await supabase.from("discord_news").delete().eq("id", newsId);
+      const { error } = await supabase
+        .from("discord_news")
+        .delete()
+        .eq("id", newsId);
+      if (error) throw new Error(error.message);
       toast.success("News unscheduled");
     } catch (error: any) {
       toast.error(error.message);
