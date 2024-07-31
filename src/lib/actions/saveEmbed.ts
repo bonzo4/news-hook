@@ -19,14 +19,16 @@ type SaveOptions = {
 type SaveTagsOptions = {
   tags: string[];
   newsId: number;
+  schedule: string;
 } & SaveOptions;
 
 export async function saveTags(options: SaveTagsOptions): Promise<void> {
-  const { tags, supabase, newsId } = options;
+  const { tags, supabase, newsId, schedule } = options;
   const tagDocs = tags.map(async (tag) => {
     const { error } = await supabase.from("_news_tags").insert({
       news_id: newsId,
       tag: tag,
+      schedule,
     });
     if (error) {
       throw error.message;

@@ -179,7 +179,12 @@ export default function ScheduleManager({
         supabase,
       });
       if (staffRole.staff_role === "ADMIN")
-        await saveTags({ newsId: news.id, tags: selectedTags, supabase });
+        await saveTags({
+          newsId: news.id,
+          tags: selectedTags,
+          supabase,
+          schedule: news.schedule,
+        });
       if (staffRole.staff_role === "ADMIN")
         await saveVanityTags({
           newsId: news.id,
