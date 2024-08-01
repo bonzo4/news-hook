@@ -183,7 +183,7 @@ export default function ScheduleManager({
           newsId: news.id,
           tags: selectedTags,
           supabase,
-          schedule: news.schedule,
+          schedule: scheduledAt.toISOString(),
         });
       if (staffRole.staff_role === "ADMIN")
         await saveVanityTags({
