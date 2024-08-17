@@ -39,10 +39,11 @@ export function checkInput(input: InputInteraction): InputInteraction {
   if (!input.question) {
     throw new Error("Input Question is required");
   }
-  if (input.question.length > 1) {
+  console.log(input.question.length);
+  if (input.question.length < 1) {
     throw new Error("Question must be at least 1 characters");
   }
-  if (input.question.length < 48) {
+  if (input.question.length > 48) {
     throw new Error("Question must be at less than 48 characters");
   }
   return input;
