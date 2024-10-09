@@ -1092,6 +1092,64 @@ export type Database = {
           }
         ];
       };
+      news_image_folders: {
+        Row: {
+          created_at: string;
+          name: string;
+          parent: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          name: string;
+          parent?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          name?: string;
+          parent?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "news_image_folders_parent_fkey";
+            columns: ["parent"];
+            isOneToOne: false;
+            referencedRelation: "news_image_folders";
+            referencedColumns: ["name"];
+          }
+        ];
+      };
+      news_images: {
+        Row: {
+          created_at: string;
+          folder: string | null;
+          id: number;
+          name: string;
+          url: string;
+        };
+        Insert: {
+          created_at?: string;
+          folder?: string | null;
+          id?: number;
+          name: string;
+          url: string;
+        };
+        Update: {
+          created_at?: string;
+          folder?: string | null;
+          id?: number;
+          name?: string;
+          url?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "news_images_folder_fkey";
+            columns: ["folder"];
+            isOneToOne: false;
+            referencedRelation: "news_image_folders";
+            referencedColumns: ["name"];
+          }
+        ];
+      };
       news_metrics: {
         Row: {
           direct_clicks: number;

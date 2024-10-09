@@ -137,45 +137,45 @@ export default function DraftManager({
         <DialogContent className="bg-primary-bg w-full">
           <DialogHeader>
             <DialogTitle>Drafts</DialogTitle>
-            <DialogDescription className="flex flex-col">
-              {drafts.map((draft, index) => (
-                <div className="flex flex-col w-full" key={index}>
-                  {index !== 0 && (
-                    <div className="w-full h-[1px] bg-white opacity-10" />
-                  )}
-                  <div className="flex w-full flex-row items-center justify-between">
-                    <div className="flex flex-row space-x-1">
-                      <span>{(page - 1) * 32 + (index + 1)}.</span>
-                      <span>{draft.title}</span>
-                    </div>
-                    <div className="flex flex-row space-x-1">
-                      <button onClick={() => loadDraft(draft.id)}>Load</button>
-                    </div>
+          </DialogHeader>
+          <DialogDescription className="flex flex-col">
+            {drafts.map((draft, index) => (
+              <div className="flex flex-col w-full" key={index}>
+                {index !== 0 && (
+                  <div className="w-full h-[1px] bg-white opacity-10" />
+                )}
+                <div className="flex w-full flex-row items-center justify-between">
+                  <div className="flex flex-row space-x-1">
+                    <span>{(page - 1) * 32 + (index + 1)}.</span>
+                    <span>{draft.title}</span>
+                  </div>
+                  <div className="flex flex-row space-x-1">
+                    <button onClick={() => loadDraft(draft.id)}>Load</button>
                   </div>
                 </div>
-              ))}
-              <div className="flex flex-row space-x-1 items-center ml-auto">
-                <span>Page:</span>
-                <span>{page}</span>
-                {page !== 1 && (
-                  <SecondaryButton
-                    onClick={() => {
-                      setPage(page - 1);
-                    }}
-                  >
-                    Prev
-                  </SecondaryButton>
-                )}
+              </div>
+            ))}
+            <div className="flex flex-row space-x-1 items-center ml-auto">
+              <span>Page:</span>
+              <span>{page}</span>
+              {page !== 1 && (
                 <SecondaryButton
                   onClick={() => {
-                    setPage(page + 1);
+                    setPage(page - 1);
                   }}
                 >
-                  Next
+                  Prev
                 </SecondaryButton>
-              </div>
-            </DialogDescription>
-          </DialogHeader>
+              )}
+              <SecondaryButton
+                onClick={() => {
+                  setPage(page + 1);
+                }}
+              >
+                Next
+              </SecondaryButton>
+            </div>
+          </DialogDescription>
         </DialogContent>
       </Dialog>
       <Input

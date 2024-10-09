@@ -7,6 +7,7 @@ import { useAtom } from "jotai";
 import { embedAtom } from "@/lib/atoms";
 import { StaffRole } from "@/lib/hooks/useUser";
 import { useEffect } from "react";
+import ImageManager from "./ImageManager";
 
 type EditorProps = { supabase: SupabaseClient<Database>; staffRole: StaffRole };
 
@@ -29,6 +30,9 @@ export default function Editor({ supabase, staffRole }: EditorProps) {
   return (
     <div className="flex flex-col items-center justify-start space-y-5 px-3 py-5 max-h-[90vh] overflow-y-scroll">
       <DraftManager supabase={supabase} embeds={embeds} setEmbeds={setEmbeds} />
+      <div className="w-full flex items-start">
+        <ImageManager supabase={supabase} />
+      </div>
       <EmbedEditor
         supabase={supabase}
         embeds={embeds}
