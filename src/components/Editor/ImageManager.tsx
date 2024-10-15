@@ -48,17 +48,21 @@ export default function ImageManager({ supabase }: Props) {
         toast.error("Image is required");
         return;
       }
-      const { publicUrl, imagePath } = await uploadImage({
+      const { imagePath } = await uploadImage({
         image,
         folderPath,
         supabase,
         bucketName: "News Images",
       });
 
+      console.log(imagePath);
+
       const { data, error } = await supabase
         .from("news_images")
         .insert({
-          url: publicUrl,
+          url: `https://api.syndicatenetwork.io/storage/v1/object/public/News%20Images/${encodeURIComponent(
+            imagePath
+          )}`,
           name: image.name,
           folder: folderPath ? folderPath.split("/").at(-2) || null : null,
         })

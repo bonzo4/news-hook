@@ -46,9 +46,9 @@ export async function uploadImage({
 
   if (!imagePath) throw new Error("Error uploading image");
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from(bucketName).getPublicUrl(imagePath);
+  //   const {
+  //     data: { publicUrl },
+  //   } = supabase.storage.from(bucketName).getPublicUrl(imagePath);
 
-  return { publicUrl, imagePath };
+  return { imagePath };
 }
