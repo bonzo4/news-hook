@@ -55,6 +55,12 @@ export default function ImageManager({ supabase }: Props) {
         bucketName: "News Images",
       });
 
+      console.log(
+        encodeURI(
+          `https://api.syndicatenetwork.io/storage/v1/object/public/News Images/${imagePath}`
+        )
+      );
+
       const { data, error } = await supabase
         .from("news_images")
         .insert({
