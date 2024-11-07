@@ -83,6 +83,16 @@ export default function EmbedManager({
     });
   };
 
+  const changeExternal = (id: number) => {
+    setEmbeds((prevEmbeds) => {
+      const embed = prevEmbeds.find((embed) => embed.id === id);
+      if (embed) {
+        embed.is_external = !embed.is_external;
+      }
+      return [...prevEmbeds];
+    });
+  };
+
   return (
     <div
       className={`flex flex-row grow min-h-100 w-full items-center justify-start space-x-3 shadow-md border-l-4 `}
@@ -100,6 +110,12 @@ export default function EmbedManager({
             <span className="">
               Embed {index + 1} - {embed.title}
             </span>
+            <input
+              type="checkbox"
+              checked={embed.is_external}
+              onChange={() => changeExternal(embed.id)}
+            />
+            <span>Is External?</span>
           </div>
           <div className="flex flex-row">
             <button

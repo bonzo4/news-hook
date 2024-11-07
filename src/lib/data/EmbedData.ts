@@ -20,4 +20,5 @@ export type EmbedData = {
   tag: string;
   interactions: Interaction[];
   reactions: string[];
+  is_external?: boolean;
 };

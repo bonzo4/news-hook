@@ -92,6 +92,7 @@ export async function saveEmbeds(options: SaveEmbedOptions): Promise<Embed[]> {
         news_image: newsImage,
         tag: embed.tag ?? null,
         reactions: embed.reactions.length > 0 ? embed.reactions : null,
+        is_external: embed.is_external ?? false,
       })
       .select()
       .single();
