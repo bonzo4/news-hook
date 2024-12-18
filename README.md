@@ -11,9 +11,10 @@ src/app/lib/themeing/*  # Themeing
 ## Features
 
 - 1 page, Hook Editor Preview, Scheduler
-- Supabase database and auth(Only Discord)
+- Supabase database, storage and auth(Only Discord)
 - Save and manage drafts
-- Save and manage Images
+- Save and manage Storage Images
+- Hosted on Vercel
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
