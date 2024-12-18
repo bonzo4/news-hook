@@ -1,3 +1,20 @@
+```
+src/app/*               # Source code
+src/app/components/*    # Components
+src/app/lib/hooks/*     # Custom hooks
+src/app/lib/actions/*   # Server actions
+src/app/lib/data/*      # Data fetching
+src/app/lib/markdown/*  # Markdown parsing
+src/app/lib/themeing/*  # Themeing
+```
+
+## Features
+
+- 1 page, Hook Editor Preview, Scheduler
+- Supabase database and auth(Only Discord)
+- Save and manage drafts
+- Save and manage Images
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
