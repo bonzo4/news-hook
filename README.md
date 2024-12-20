@@ -1,11 +1,11 @@
 ```
 src/app/*               # Source code
-src/app/components/*    # Components
-src/app/lib/hooks/*     # Custom hooks
-src/app/lib/actions/*   # Server actions
-src/app/lib/data/*      # Data fetching
-src/app/lib/markdown/*  # Markdown parsing
-src/app/lib/themeing/*  # Themeing
+src/components/*    # Components
+src/lib/hooks/*     # Custom hooks
+src/lib/actions/*   # Server actions
+src/lib/data/*      # Data fetching
+src/lib/markdown/*  # Markdown parsing
+src/lib/themeing/*  # Themeing
 ```
 
 ## Features
